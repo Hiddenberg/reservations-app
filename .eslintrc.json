@@ -3,6 +3,7 @@
    "rules": {
       "indent": ["error", 3],
       "@next/next/no-img-element": "off",
-      "react/no-unescaped-entities": "off"
+      "react/no-unescaped-entities": "off",
+      "semi": ["error", "never"]
    }
 }
