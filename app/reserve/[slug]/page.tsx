@@ -16,7 +16,6 @@ function ReservationPage() {
             </div>
          </main>
       </main>
-
    )
 }
 
