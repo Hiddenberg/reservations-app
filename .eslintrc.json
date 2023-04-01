@@ -4,6 +4,7 @@
       "indent": ["error", 3],
       "@next/next/no-img-element": "off",
       "react/no-unescaped-entities": "off",
-      "semi": ["error", "never"]
+      "semi": ["error", "never"],
+      "react/self-closing-comp": "error"
    }
 }
