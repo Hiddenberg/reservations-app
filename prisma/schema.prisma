@@ -23,8 +23,8 @@ model Restaurant {
    items Item[]
    location_id Int
    location Location @relation(fields: [location_id], references: [id])
-   cuisin_id Int
-   cuisine Cuisine @relation(fields: [cuisin_id], references: [id])
+   cuisine_id Int
+   cuisine Cuisine @relation(fields: [cuisine_id], references: [id])
    created_at DateTime @default(now())
    updated_at DateTime @updatedAt
 }
