@@ -8,11 +8,12 @@ function SearchBar() {
    const [location, setLocation] = useState("")
 
    const handleSearchButton: MouseEventHandler<HTMLButtonElement> = (e) => {
-      if (location == "banana") {
+      if (location === "") {
          return
       }
 
-      router.push("/search")
+      router.push(`/search?city=${location}`)
+      setLocation("")
    }
    const handleSearchChange: ChangeEventHandler<HTMLInputElement>  = (e) => {
       setLocation(e.target.value)

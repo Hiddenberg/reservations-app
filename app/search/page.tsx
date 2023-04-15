@@ -1,5 +1,3 @@
-import Link from "next/link"
-import NavBar from "../components/NavBar"
 import SearchHeader from "./components/SearchHeader"
 import SearchSideBar from "./components/SearchSideBar"
 import SearchRestaurantCard from "./components/SearchRestaurantCard"
