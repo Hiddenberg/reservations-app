@@ -16,6 +16,16 @@ export interface RestaurantSearchCardType {
       location: Location
 }
 
+export interface LocationSidebarType {
+   id: number
+   name: string
+}
+
+export interface CuisineSidebarType {
+   id: number,
+   name: string
+}
+
 const fetchRestaurantsByCity = async (cityName: string | undefined): Promise<RestaurantSearchCardType[]> => {
    cityName = cityName?.trim().toLowerCase()
    if (!cityName || cityName === "") {
@@ -43,15 +53,41 @@ const fetchRestaurantsByCity = async (cityName: string | undefined): Promise<Res
 
    return restaurants
 }
-async function Search({searchParams: {city}}: {searchParams: {city?:string}}) {
-   const restaurantsFound = await fetchRestaurantsByCity(city)
+
+async function fetchLocations () {
+   const locations = await prisma.location.findMany({
+      select: {
+         name: true,
+         id: true,
+      }
+   })
+
+   return locations
+}
+
+async function fetchCuisins() {
+   const cuisins = await prisma.cuisine.findMany({
+      select: {
+         name: true,
+         id: true
+      }
+   })
+
+   return cuisins
+}
+
+
+async function Search({searchParams}: {searchParams: {city?:string, cuisine?: string, price?: PRICE}}) {
+   const restaurantsFound = await fetchRestaurantsByCity(searchParams.city)
+   const locations = await fetchLocations()
+   const cuisines = await fetchCuisins()
 
 
    return (
       <>
          <SearchHeader />
          <div className="flex py-4 m-auto w-2/3 justify-between items-start">
-            <SearchSideBar />
+            <SearchSideBar locations={locations} cuisines={cuisines} searchParams={searchParams}/>
             <div className="w-5/6">
                {restaurantsFound.length > 0 ?
                   restaurantsFound.map(restaurant => (
