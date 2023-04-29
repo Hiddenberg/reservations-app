@@ -26,20 +26,33 @@ export interface CuisineSidebarType {
    name: string
 }
 
-const fetchRestaurantsByCity = async (cityName: string | undefined): Promise<RestaurantSearchCardType[]> => {
-   cityName = cityName?.trim().toLowerCase()
-   if (!cityName || cityName === "") {
-      return []
+export interface SearchParamsType {
+   city?:string, 
+   cuisine?: string, 
+   price?: PRICE
+}
+
+const fetchRestaurants = async (searchParams: SearchParamsType): Promise<RestaurantSearchCardType[]> => {
+   const whereQuery: any= {}
+
+   if (searchParams.city) {
+      whereQuery.location = {
+         name: {
+            equals: searchParams.city
+         }
+      }
+   }
+   if (searchParams.cuisine) {
+      whereQuery.cuisine = {
+         name: searchParams.cuisine
+      }
+   }
+   if (searchParams.price) {
+      whereQuery.price = searchParams.price
    }
 
    let restaurants = await prisma.restaurant.findMany({
-      where: {
-         location: {
-            name: {
-               equals: cityName
-            }
-         }
-      },
+      where: whereQuery,
       select: {
          id: true,
          name: true,
@@ -77,8 +90,8 @@ async function fetchCuisins() {
 }
 
 
-async function Search({searchParams}: {searchParams: {city?:string, cuisine?: string, price?: PRICE}}) {
-   const restaurantsFound = await fetchRestaurantsByCity(searchParams.city)
+async function Search({searchParams}: {searchParams: SearchParamsType}) {
+   const restaurantsFound = await fetchRestaurants(searchParams)
    const locations = await fetchLocations()
    const cuisines = await fetchCuisins()
 
