@@ -2,7 +2,7 @@ import SearchHeader from "./components/SearchHeader"
 import SearchRestaurantCard from "./components/SearchRestaurantCard"
 import SearchSideBar from "./components/SearchSideBar"
 
-import { Cuisine, Location, PRICE, PrismaClient } from "@prisma/client"
+import { Cuisine, Location, PRICE, PrismaClient, Review } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
@@ -14,6 +14,7 @@ export interface RestaurantSearchCardType {
       cuisine: Cuisine
       slug: string
       location: Location
+      reviews: Review[]
 }
 
 export interface LocationSidebarType {
@@ -33,7 +34,7 @@ export interface SearchParamsType {
 }
 
 const fetchRestaurants = async (searchParams: SearchParamsType): Promise<RestaurantSearchCardType[]> => {
-   const whereQuery: any= {}
+   const whereQuery: any = {}
 
    if (searchParams.city) {
       whereQuery.location = {
@@ -60,7 +61,8 @@ const fetchRestaurants = async (searchParams: SearchParamsType): Promise<Restaur
          price: true,
          cuisine: true,
          slug: true,
-         location: true
+         location: true,
+         reviews: true
       }
    })
 

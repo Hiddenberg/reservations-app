@@ -1,8 +1,12 @@
 import Link from "next/link"
 import { RestaurantSearchCardType } from "../page"
 import Price from "../../components/Price"
+import { calculateAverageReviews } from "../../../utils/numbers"
+import Stars from "../../components/Stars"
 
 function SearchRestaurantCard({restaurant}: {restaurant: RestaurantSearchCardType}) {
+   let restaurantAverageReview = calculateAverageReviews(restaurant.reviews)
+
    return (
       <div className="border-b flex pb-5">
          
@@ -14,8 +18,8 @@ function SearchRestaurantCard({restaurant}: {restaurant: RestaurantSearchCardTyp
          <div className="pl-5">
             <h2 className="text-3xl">{restaurant.name}</h2>
             <div className="flex items-start">
-               <div className="flex mb-2">*****</div>
-               <p className="ml-2 text-sm">Awesome</p>
+               <Stars starsCount={restaurantAverageReview}/>
+               <p className="ml-2 text-sm">{restaurantAverageReview >= 4 && <b>Awesome</b>}</p>
             </div>
             <div className="mb-9">
                <div className="font-light flex text-reg">
