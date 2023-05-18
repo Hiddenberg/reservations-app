@@ -1,13 +1,15 @@
-function RestaurantRating() {
+import { Review } from "@prisma/client"
+import Stars from "../../components/Stars"
+import { calculateAverageReviews } from "../../../utils/numbers"
+
+function RestaurantRating({reviews}: {reviews:Review[]}) {
+   let reviewAverage = calculateAverageReviews(reviews, true)
+
    return (
-      <div className="flex items-end">
-         <div className="ratings mt-2 flex items-center">
-            <p>*****</p>
-            <p className="text-reg ml-3">4.9</p>
-         </div>
-         <div>
-            <p className="text-reg ml-4">600 Reviews</p>
-         </div>
+      <div className="flex items-center mt-2">
+         <Stars reviews={reviews}/>
+         <p className="text-reg ml-3">{reviewAverage}</p>
+         <p className="text-reg ml-4">{reviews.length} Reviews</p>
       </div>
    )
 }
