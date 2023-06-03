@@ -1,5 +1,5 @@
 import Link from "next/link"
-import LoginModal from "./LoginModal"
+import AuthModal from "./AuthModal"
 
 function NavBar() {
    return (
@@ -7,8 +7,8 @@ function NavBar() {
          <Link href="" className="font-bold text-gray-700 text-2xl"> OpenTable </Link>
          <div>
             <div className="flex">
-               <LoginModal isSignIn={true}/>
-               <LoginModal isSignIn={false}/>
+               <AuthModal isSignIn={true}/>
+               <AuthModal isSignIn={false}/>
             </div>
          </div>
       </nav>

@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from 'react'
+import { ChangeEventHandler, useState } from 'react'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
-import SignUpForm from './SignUpForm'
+import ModalForm from './ModalForm'
 
 const style = {
    position: 'absolute' as 'absolute',
@@ -17,10 +17,35 @@ const style = {
    borderRadius: "0.25rem"
 }
 
-export default function LoginModal({isSignIn}:{isSignIn:boolean}) {
+export interface FormInputs {
+   firstName: string
+   lastName: string
+   email: string
+   phone: string
+   city: string
+   password: string
+}
+
+export default function AuthModal({isSignIn}:{isSignIn:boolean}) {
    const [open, setOpen] = useState(false)
    const handleOpen = () => setOpen(true)
    const handleClose = () => setOpen(false)
+
+   const [inputs, setInputs] = useState<FormInputs>({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      city: "",
+      password: ""
+   })
+
+   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+      setInputs(() => ({
+         ...inputs,
+         [e.target.name]: e.target.value
+      }))
+   }
 
    return (
       <div>
@@ -49,10 +74,7 @@ export default function LoginModal({isSignIn}:{isSignIn:boolean}) {
                      <p className='text-xl m-auto text-center mb-4'>
                         {isSignIn ? "Login to your account" : "Create a new account"}
                      </p>
-                     {isSignIn ?
-                        "" :
-                        <SignUpForm />
-                     }
+                     <ModalForm isSignIn={isSignIn} handleInputChange={handleInputChange}/>
                   </div>
                </div>
             </Box>
