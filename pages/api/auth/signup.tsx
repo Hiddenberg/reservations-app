@@ -1,5 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import validator from "validator"
+import { PrismaClient } from "@prisma/client"
+import bcrypt from "bcrypt"
+
+const prisma = new PrismaClient()
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
    if (req.method == "POST") {
@@ -52,8 +56,37 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          return res.status(400).json({errorMessage: errors[0]})
       }
 
+      const userWithEmail = await prisma.user.findUnique({
+         where: {
+            email
+         }
+      })
+
+      if (userWithEmail) {
+         return res.status(400).json({
+            errorMessage: `Email ${email} is already in use`
+         })
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10)
+
+      const user = await prisma.user.create({
+         data: {
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            phone: phone,
+            city: city,
+            password: hashedPassword
+         }
+      })
+
+      if (user) {
+         return res.status(200).json(user)
+      }
+
       res.status(200).json({
-         hello: "You passed the validation!"
+         hello: "You passed the validation! " + hashedPassword
       })
    }
 }
