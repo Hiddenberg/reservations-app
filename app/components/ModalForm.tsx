@@ -1,13 +1,13 @@
 import { ChangeEventHandler } from "react"
 
-function ModalForm({isSignIn, handleInputChange}: {isSignIn:boolean, handleInputChange: ChangeEventHandler<HTMLInputElement>}) {
+function ModalForm({isSignIn, handleInputChange, buttonDisabled}: {isSignIn:boolean, handleInputChange: ChangeEventHandler<HTMLInputElement>, buttonDisabled: boolean}) {
    return (
       <form onSubmitCapture={e => {e.preventDefault(); console.log(e)}} className="space-y-3 flex flex-col justify-center">
          {isSignIn ? 
             <>
                <input onChange={handleInputChange} name="email" type="email" className="border rounded p-2 py-3 w-full" placeholder="Email"/>
                <input onChange={handleInputChange} name="password" type="password" className="border rounded p-2 py-3 w-full" placeholder="Password"/>
-               <button className="bg-blue-500 text-white px-3 py-2 rounded mx-auto w-40 cursor-pointer">Sign In</button>
+               <button className="bg-blue-500 text-white px-3 py-2 rounded mx-auto w-40 cursor-pointer disabled:bg-gray-400 disabled:cursor-default" disabled={buttonDisabled}>Sign In</button>
             </> :
             <>
                <div className="flex space-x-2">
@@ -18,7 +18,7 @@ function ModalForm({isSignIn, handleInputChange}: {isSignIn:boolean, handleInput
                <input onChange={handleInputChange} name="phone" type="tel" className="border rounded p-2 py-3 w-full" placeholder="Phone"/>
                <input onChange={handleInputChange} name="city" type="text" className="border rounded p-2 py-3 w-full" placeholder="City"/>
                <input onChange={handleInputChange} name="password" type="password" className="border rounded p-2 py-3 w-full" placeholder="Password"/>
-               <button className="bg-blue-500 text-white px-3 py-2 rounded mx-auto w-40 cursor-pointer">Sign Up</button>
+               <button className="bg-blue-500 text-white px-3 py-2 rounded mx-auto w-40 cursor-pointer disabled:bg-gray-400 disabled:cursor-default" disabled={buttonDisabled}>Sign Up</button>
             </>
          }
       </form>

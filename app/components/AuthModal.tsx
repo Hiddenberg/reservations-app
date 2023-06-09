@@ -1,6 +1,6 @@
 "use client"
 
-import { ChangeEventHandler, useState } from 'react'
+import { ChangeEventHandler, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import ModalForm from './ModalForm'
@@ -40,6 +40,32 @@ export default function AuthModal({isSignIn}:{isSignIn:boolean}) {
       password: ""
    })
 
+   useEffect(() => {
+      if (isSignIn) {
+         if (inputs.password && inputs.email) {
+            setButtonDisabled(false)
+         } else {
+            setButtonDisabled(true)
+         }
+      } else {
+         let allInputsFilled = true
+
+         for (const key in inputs as {[key: string]: any}) {
+            if (!inputs[key as keyof FormInputs]) {
+               allInputsFilled = false
+               break
+            }
+         }
+   
+         if (allInputsFilled) {
+            setButtonDisabled(false)
+         } else {
+            setButtonDisabled(true)
+         }
+      }
+   }, [inputs, isSignIn])
+
+   const [buttonDisabled, setButtonDisabled] = useState(true)
    const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
       setInputs(() => ({
          ...inputs,
@@ -74,7 +100,7 @@ export default function AuthModal({isSignIn}:{isSignIn:boolean}) {
                      <p className='text-xl m-auto text-center mb-4'>
                         {isSignIn ? "Login to your account" : "Create a new account"}
                      </p>
-                     <ModalForm isSignIn={isSignIn} handleInputChange={handleInputChange}/>
+                     <ModalForm isSignIn={isSignIn} handleInputChange={handleInputChange} buttonDisabled={buttonDisabled}/>
                   </div>
                </div>
             </Box>
