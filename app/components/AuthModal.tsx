@@ -34,7 +34,7 @@ export default function AuthModal({isSignIn}:{isSignIn:boolean}) {
    const handleOpen = () => setOpen(true)
    const handleClose = () => setOpen(false)
    const {signIn, signUp} = useAuth()
-   const {loading, error} = useContext(AuthenticationContext)
+   const {data, loading, error} = useContext(AuthenticationContext)
 
    const [inputs, setInputs] = useState<FormInputs>({
       firstName: "",
@@ -70,6 +70,12 @@ export default function AuthModal({isSignIn}:{isSignIn:boolean}) {
          }
       }
    }, [inputs, isSignIn])
+
+   useEffect(() => {
+      if (!loading && data != null) {
+         setOpen(false)
+      }
+   }, [loading, data])
 
    const [buttonDisabled, setButtonDisabled] = useState(true)
    const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
