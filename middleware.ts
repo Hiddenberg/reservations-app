@@ -16,7 +16,7 @@ export const middleware: NextMiddleware = async (req, event) => {
       }
    )
 
-   const bearerToken = req.headers.get("authorization")
+   const bearerToken = req.headers.get("authorization") || req.cookies.get("jwt")?.value
    if (!bearerToken) {
       return unauthorizedResponse
    }

@@ -52,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          .setProtectedHeader({alg: "HS256"})
          .setExpirationTime("24h")
          .sign(secret)
-      return res.status(200).json({
+      return res.status(200).setHeader("Set-Cookie", `jwt=Bearer ${token}; Path=/; HttpOnly`).json({
          token: token
       })
    }

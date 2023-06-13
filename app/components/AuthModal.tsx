@@ -6,7 +6,7 @@ import Modal from '@mui/material/Modal'
 import FormInputs from './FormInputs'
 import useAuth from '../../hooks/useAuth'
 import { AuthenticationContext } from '../context/AuthContext'
-import { CircularProgress } from '@mui/material'
+import { Alert, CircularProgress } from '@mui/material'
 
 const style = {
    position: 'absolute' as 'absolute',
@@ -122,6 +122,9 @@ export default function AuthModal({isSignIn}:{isSignIn:boolean}) {
                            <p className='text-xl m-auto text-center mb-4'>
                               {isSignIn ? "Login to your account" : "Create a new account"}
                            </p>
+                           {error != null &&
+                              <Alert severity='error' className='mb-4'>{error}</Alert>
+                           }
                            <form className="space-y-3 flex flex-col justify-center">
                               <FormInputs isSignIn={isSignIn} handleInputChange={handleInputChange}/>
                               <button
