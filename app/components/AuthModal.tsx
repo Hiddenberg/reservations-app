@@ -1,9 +1,10 @@
 "use client"
 
-import { ChangeEventHandler, useEffect, useState } from 'react'
+import { ChangeEventHandler, MouseEventHandler, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
-import ModalForm from './ModalForm'
+import FormInputs from './FormInputs'
+import useAuth from '../../hooks/useAuth'
 
 const style = {
    position: 'absolute' as 'absolute',
@@ -30,6 +31,7 @@ export default function AuthModal({isSignIn}:{isSignIn:boolean}) {
    const [open, setOpen] = useState(false)
    const handleOpen = () => setOpen(true)
    const handleClose = () => setOpen(false)
+   const {signIn, signUp} = useAuth()
 
    const [inputs, setInputs] = useState<FormInputs>({
       firstName: "",
@@ -74,6 +76,16 @@ export default function AuthModal({isSignIn}:{isSignIn:boolean}) {
       }))
    }
 
+   const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
+      e.preventDefault()
+
+      if(isSignIn) {
+         signIn(inputs)
+      } else {
+         signUp(inputs)
+      }
+   }
+
    return (
       <div>
          {isSignIn ?
@@ -101,7 +113,14 @@ export default function AuthModal({isSignIn}:{isSignIn:boolean}) {
                      <p className='text-xl m-auto text-center mb-4'>
                         {isSignIn ? "Login to your account" : "Create a new account"}
                      </p>
-                     <ModalForm isSignIn={isSignIn} handleInputChange={handleInputChange} buttonDisabled={buttonDisabled}/>
+                     <form className="space-y-3 flex flex-col justify-center">
+                        <FormInputs isSignIn={isSignIn} handleInputChange={handleInputChange}/>
+                        <button
+                           className="bg-blue-500 text-white px-3 py-2 rounded mx-auto w-40 cursor-pointer disabled:bg-gray-400 disabled:cursor-default"
+                           disabled={buttonDisabled}
+                           onClick={handleClick}
+                        >{isSignIn ? "Sign In": "Sign Up"}</button>
+                     </form>
                   </div>
                </div>
             </Box>

@@ -9,7 +9,6 @@ const prisma = new PrismaClient()
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
    if (req.method === "POST") {
       const {email, password} = req.body
-      const errors: string[] = []
 
       const validationSchema = [
          {
@@ -22,11 +21,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          }
       ]
 
-      validationSchema.forEach(input => {
+      for (const input of validationSchema) {
          if (!input.valid) {
             return res.status(400).json({errorMessage: input.errorMessage})
          }
-      })
+      }
 
       const userWithEmail = await prisma.user.findUnique({
          where: {
