@@ -50,6 +50,7 @@ export default function AuthModal({isSignIn}:{isSignIn:boolean}) {
       } else {
          let allInputsFilled = true
 
+         // Iterating over each input and checking if any of them is empty
          for (const key in inputs as {[key: string]: any}) {
             if (!inputs[key as keyof FormInputs]) {
                allInputsFilled = false
