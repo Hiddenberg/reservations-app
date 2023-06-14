@@ -8,9 +8,11 @@ function RestaurantReservationCard() {
          </div>
          <div className="my-3 flex flex-col">
             <label htmlFor="">Party size</label>
-            <select name="" className="py-3 border-b font-light" id="">
-               <option value="">1 person</option>
-               <option value="">2 people</option>
+            <select name="partySize" className="py-3 border-b font-light" id="">
+               {new Array(10).fill(1).map((_, i) => {
+                  const n = i+1
+                  return <option key={i} value={n}>{n} {n > 1 ? "people" : "person"}</option>
+               })}
             </select>
          </div>
          <div className="flex justify-between">
