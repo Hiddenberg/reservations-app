@@ -31,6 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          email: payload.email
       },
       select: {
+         id: true,
          first_name: true,
          last_name: true,
          city: true,
@@ -39,8 +40,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
    })
 
+   if (user) {
+      const clientUser = {
+         id: user.id,
+         firstName: user.first_name,
+         lastName: user.last_name,
+         email: user.email,
+         city: user.city,
+         phone: user.phone
+      }
+
+      return res.status(200).json(clientUser)
+   }
+
    res.status(200).json({
-      message: "You reached this protected endpoint :D",
-      user
+      message: "Not sure how you got here :D"
    })
 }

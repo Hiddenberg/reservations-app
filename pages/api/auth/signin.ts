@@ -52,9 +52,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          .setProtectedHeader({alg: "HS256"})
          .setExpirationTime("24h")
          .sign(secret)
-      return res.status(200).setHeader("Set-Cookie", `jwt=Bearer ${token}; Path=/; HttpOnly`).json({
-         token: token
-      })
+      const clientUser = {
+         id: userWithEmail.id,
+         firstName: userWithEmail.first_name,
+         lastName: userWithEmail.last_name,
+         email: userWithEmail.email,
+         city: userWithEmail.city,
+         phone: userWithEmail.phone
+      }
+      return res.status(200).setHeader("Set-Cookie", `jwt=Bearer ${token}; Path=/; HttpOnly`).json(clientUser)
    }
 
    return res.status(404).json({

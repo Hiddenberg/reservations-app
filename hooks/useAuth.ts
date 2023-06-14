@@ -1,13 +1,14 @@
-import axios, { AxiosError } from "axios"
+import axios from "axios"
 import { FormInputs } from "../app/components/AuthModal"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { AuthenticationContext } from "../app/context/AuthContext"
 
 export default function useAuth() {
    const {setAuthState} = useContext(AuthenticationContext)
    const SIGN_IN_ENDPOINT = "http://localhost:3000/api/auth/signin"
    const SIGN_UP_ENDPOINT = "http://localhost:3000/api/auth/signup"
-   
+   const LOGOUT_ENDPOINT = "http://localhost:3000/api/auth/logout"
+
    const signIn = async ({email, password}:{email: string, password: string}) => {
       setAuthState({loading: true, data: null, error: null})
 
@@ -53,8 +54,23 @@ export default function useAuth() {
       }
    }
 
+   const logout = async () => {
+      try {
+         await axios.get(LOGOUT_ENDPOINT)
+
+         setAuthState({
+            loading: false,
+            data: null,
+            error: null
+         })
+      } catch (error) {
+         console.log(error)
+      }
+   }
+
    return {
       signIn,
-      signUp
+      signUp,
+      logout
    }
 }

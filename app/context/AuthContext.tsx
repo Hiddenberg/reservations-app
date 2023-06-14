@@ -1,5 +1,6 @@
 "use client"
-import React, { useState, createContext } from "react"
+import axios from "axios"
+import React, { useState, createContext, useEffect } from "react"
 
 interface User {
    id: number
@@ -18,6 +19,8 @@ interface AuthState {
 interface AuthStateSetter extends AuthState{
    setAuthState: React.Dispatch<React.SetStateAction<AuthState>>
 }
+
+
 export const AuthenticationContext = createContext<AuthStateSetter>({
    loading: false,
    data: null,
@@ -25,12 +28,49 @@ export const AuthenticationContext = createContext<AuthStateSetter>({
    setAuthState: () => {}
 })
 
+
 export default function AuthContext({children}: {children: React.ReactNode}) {
    const [authState, setAuthState] = useState<AuthState>({
-      loading: false,
+      loading: true,
       data: null,
       error: null,
    })
+
+
+   useEffect(() => {
+      if (authState.data == null) {
+         setAuthState({
+            loading: true,
+            data: null,
+            error: null
+         })
+
+         console.log("activating user useeffect")
+         const fetchUser = async() => {
+            const ME_ENDPOINT = "http://localhost:3000/api/auth/me"
+
+            try {
+               const response = await axios.get(ME_ENDPOINT)
+               console.log(response)
+
+               setAuthState({
+                  loading: false,
+                  data: response.data,
+                  error: null
+               })
+            } catch (error: any) {
+               console.log("no token found")
+               setAuthState({
+                  loading: false,
+                  data: null,
+                  error: null
+               })
+            }
+         }
+
+         fetchUser()
+      }
+   }, [authState.data])
 
    return (
       <AuthenticationContext.Provider value={{...authState, setAuthState}}>
