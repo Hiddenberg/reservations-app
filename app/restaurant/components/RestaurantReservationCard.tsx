@@ -1,6 +1,43 @@
 "use client"
 
-function RestaurantReservationCard() {
+import { useState } from "react"
+import DatePicker from "react-datepicker"
+import { times } from "../../../data/times"
+
+
+function RestaurantReservationCard({openTime, closeTime}: {openTime: string, closeTime: string}) {
+   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
+   const handleDateChange = (date: Date | null) => {
+      if (date) {
+         setSelectedDate(date)
+         return
+      }
+      setSelectedDate(null)
+      return
+   }
+
+   const filterTimesByRestaurantWindow = () => {
+      const timesInWindow = []
+
+      let isWithinWindow = false
+      for (let i = 0; i < times.length; i++) {
+         const time = times[i]
+
+         if (time.time === openTime) {
+            isWithinWindow = true
+         }
+         if (isWithinWindow) {
+            timesInWindow.push(time)
+         }
+         if (time.time === closeTime) {
+            isWithinWindow = false
+            break
+         }
+      }
+
+      return timesInWindow
+   }
+
    return (
       <div className="fixed w-[15%] bg-white rounded p-3 shadow">
          <div className="text-center border-b pb-2 font-bold">
@@ -18,13 +55,15 @@ function RestaurantReservationCard() {
          <div className="flex justify-between">
             <div className="flex flex-col w-[48%]">
                <label htmlFor="">Date</label>
+               <DatePicker selected={selectedDate} onChange={handleDateChange} className="py-3 border-b font-light text-reg w-24" dateFormat="MMMM d" wrapperClassName="w-[48%]"/>
                <input type="text" className="py-3 border-b font-light w-28" />
             </div>
             <div className="flex flex-col w-[48%]">
                <label htmlFor="">Time</label>
                <select name="" id="" className="py-3 border-b font-light">
-                  <option value="">7:30 AM</option>
-                  <option value="">9:30 AM</option>
+                  {filterTimesByRestaurantWindow().map(time => (
+                     <option key={time.displayTime} value={time.time}>{time.displayTime}</option>
+                  ))}
                </select>
             </div>
          </div>
