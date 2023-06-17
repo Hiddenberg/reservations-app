@@ -59,7 +59,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          slug
       },
       select: {
-         tables: true
+         tables: true,
+         open_time: true,
+         close_time: true
       }
    })
 
@@ -88,17 +90,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
    })
 
    const availabilities = searchTimesWithTables.map(t => {
-      console.log(t.tables)
       const sumSeats = t.tables.reduce((sum,  table) => {
-         console.log(table.seats)
          return sum + table.seats
       }, 0)
 
-      // console.log(sumSeats)
       return {
          time: t.time,
          available: sumSeats >= parseInt(partySize)
       }
+   }).filter(availability => {
+      const timeIsAfterOpeningHours = new Date(`${day}T${availability.time}`) >= new Date(`${day}T${restaurant.open_time}`)
+      const timeIsBeforeClosingHours = new Date(`${day}T${availability.time}`) <= new Date(`${day}T${restaurant.close_time}`)
+
+      return timeIsAfterOpeningHours && timeIsBeforeClosingHours
    })
    return res.json({searchTimes, bookings, bookingTablesObject, tables, searchTimesWithTables, availabilities})
 }
