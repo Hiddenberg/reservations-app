@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { times } from "../../../../data/times"
 import { PrismaClient } from "@prisma/client"
+import { table } from "console"
 
 interface AvailabilityQueryParams {
    [key: string]: string
@@ -85,5 +86,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          return true
       })
    })
-   return res.json({searchTimes, bookings, bookingTablesObject, tables, searchTimesWithTables})
+
+   const availabilities = searchTimesWithTables.map(t => {
+      console.log(t.tables)
+      const sumSeats = t.tables.reduce((sum,  table) => {
+         console.log(table.seats)
+         return sum + table.seats
+      }, 0)
+
+      // console.log(sumSeats)
+      return {
+         time: t.time,
+         available: sumSeats >= parseInt(partySize)
+      }
+   })
+   return res.json({searchTimes, bookings, bookingTablesObject, tables, searchTimesWithTables, availabilities})
 }
