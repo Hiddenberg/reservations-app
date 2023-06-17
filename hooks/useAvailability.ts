@@ -13,6 +13,7 @@ export default function useAvailability() {
 
    const fetchAvailabilities = async ({slug, partySize, day, time}: {slug:string, partySize: string, day:string, time:string}) => {
       setLoading(true)
+      setAvailabilities(null)
 
       try {
          const response = await axios.get(`http://localhost:3000/api/restaurant/${slug}/availability?day=${day}&time=${time}&partySize=${partySize}`)

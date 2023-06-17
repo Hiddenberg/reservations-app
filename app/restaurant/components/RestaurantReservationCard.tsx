@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker"
 import { times } from "../../../data/times"
 import useAvailability from "../../../hooks/useAvailability"
 import { CircularProgress } from "@mui/material"
+import fortmatTime from "../../../utils/formatTime"
 
 
 function RestaurantReservationCard({openTime, closeTime, slug}: {openTime: string, closeTime: string, slug:string}) {
@@ -61,7 +62,6 @@ function RestaurantReservationCard({openTime, closeTime, slug}: {openTime: strin
       <div className="bg-white rounded p-3 shadow">
          <div className="text-center border-b pb-2 font-bold">
             <h4 className="mr-7 text-lg">Make a Reservation</h4>
-            {time}
          </div>
          <div className="my-3 flex flex-col">
             <label htmlFor="">Party size</label>
@@ -97,13 +97,13 @@ function RestaurantReservationCard({openTime, closeTime, slug}: {openTime: strin
          </div>
          {availabilities && 
             <div className="mt-4">
-               <p className="text-reg">"Select A Time"</p>
-               <div className="flex flex-wrap mt-2 space-x-1 space-y-1">
+               <p className="text-reg text-center font-bold">Select A Time</p>
+               <div className="flex flex-wrap mt-2 justify-evenly gap-2">
                   {availabilities.map(time => {
                      if (!time.available) {
-                        return <button className="p-2 bg-gray-600 rounded text-white text-center font-bold cursor-pointer w-20" key={time.time}>{time.time}</button>
+                        return <button className="p-2 bg-gray-600 rounded text-white text-center font-bold cursor-pointer w-20" key={time.time}>{fortmatTime(time.time)}</button>
                      }
-                     return <button className="p-2 bg-red-600 rounded text-white text-center font-bold cursor-pointer w-20" key={time.time}>{time.time}</button>
+                     return <button className="p-2 bg-red-600 rounded text-white text-center font-bold cursor-pointer w-20" key={time.time}>{fortmatTime(time.time)}</button>
                   })}
                </div>
             </div>
