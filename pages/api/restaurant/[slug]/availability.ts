@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
+import { times } from "../../../../data/times"
 
 interface AvailabilityQueryParams {
    [key: string]: string
@@ -13,5 +14,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       })
    }
 
-   return res.json({slug, day, time, partySize})
+   const searchTimes = times.find(t => {
+      return t.time === time
+   })?.searchTimes
+
+   if (!searchTimes) {
+      return res.status(400).json({
+         errorMessage: "Invalid data provided"
+      })
+   }
+
+   return res.json(searchTimes)
 }
