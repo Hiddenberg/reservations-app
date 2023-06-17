@@ -104,5 +104,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       return timeIsAfterOpeningHours && timeIsBeforeClosingHours
    })
-   return res.json({searchTimes, bookings, bookingTablesObject, tables, searchTimesWithTables, availabilities})
+   return res.json(availabilities)
 }

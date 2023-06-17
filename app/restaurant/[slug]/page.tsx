@@ -59,8 +59,8 @@ async function RestaurantDetails({params: {slug}}: {params: {slug: string}}) {
             <RestaurantImages images={restaurant.images}/> 
             <RestaurantReviews />
          </div>
-         <div className="w-[27%] relative text-reg">
-            <RestaurantReservationCard openTime={restaurant.open_time} closeTime={restaurant.close_time}/>
+         <div className="sticky top-4 w-[27%] text-reg">
+            <RestaurantReservationCard openTime={restaurant.open_time} closeTime={restaurant.close_time} slug={restaurant.slug}/>
          </div>
       </>
    )
