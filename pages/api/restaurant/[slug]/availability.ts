@@ -76,5 +76,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          tables
       }
    })
+
+   searchTimesWithTables.forEach(t => {
+      t.tables = t.tables.filter(table => {
+         if (bookingTablesObject[t.date.toISOString()]) {
+            if (bookingTablesObject[t.date.toISOString()][table.id]) return false
+         }
+         return true
+      })
+   })
    return res.json({searchTimes, bookings, bookingTablesObject, tables, searchTimesWithTables})
 }
