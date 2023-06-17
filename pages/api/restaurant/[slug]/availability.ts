@@ -67,7 +67,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          errorMessage: "Invalid data provided"
       })
    }
-
    const tables = restaurant.tables
-   return res.json({searchTimes, bookings, bookingTablesObject, tables})
+
+   const searchTimesWithTables = searchTimes.map(searchTime => {
+      return {
+         date: new Date(`${day}T${searchTime}`),
+         time: searchTime,
+         tables
+      }
+   })
+   return res.json({searchTimes, bookings, bookingTablesObject, tables, searchTimesWithTables})
 }
