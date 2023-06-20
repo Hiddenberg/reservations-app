@@ -53,8 +53,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          available: sumSeats >= parseInt(partySize)
       }
    }).filter(availability => {
-      const timeIsAfterOpeningHours = new Date(`${day}T${availability.time}`) >= new Date(`${day}T${restaurant.open_time}`)
-      const timeIsBeforeClosingHours = new Date(`${day}T${availability.time}`) <= new Date(`${day}T${restaurant.close_time}`)
+      const availabilityTime = new Date(`${day}T${availability.time}`)
+      const timeIsAfterOpeningHours = availabilityTime >= new Date(`${day}T${restaurant.open_time}`)
+      const timeIsBeforeClosingHours = availabilityTime <= new Date(`${day}T${restaurant.close_time}`)
 
       return timeIsAfterOpeningHours && timeIsBeforeClosingHours
    })
