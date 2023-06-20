@@ -60,7 +60,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
    })
 
-   return res.json(tablesCount)
+   console.log(tablesCount)
+
+   const tablesToBook: number[] = []
+
+   let seatsRemaining = parseInt(partySize)
+   while (seatsRemaining > 0) {
+      if (seatsRemaining >= 3) {
+         if (tablesCount[4].length) {
+            tablesToBook.push(tablesCount[4][0])
+            tablesCount[4].shift()
+            seatsRemaining -= 4
+         } else {
+            tablesToBook.push(tablesCount[2][0])
+            tablesCount[2].shift()
+            seatsRemaining -= 2
+         }
+      } else {
+         if (tablesCount[2].length) {
+            tablesToBook.push(tablesCount[2][0])
+            tablesCount[2].shift()
+            seatsRemaining -= 2
+         } else {
+            tablesToBook.push(tablesCount[4][0])
+            tablesCount[4].shift()
+            seatsRemaining -= 4
+         }
+      }
+   }
+
+   return res.json({tablesCount, tablesToBook})
 }
 
 // Endpoint: http://localhost:3000/restaurant/vivaan-fine-indian-cuisine-ottawa/reserve?partySize=4&day=2023-04-21&time=22:30:00.000Z
