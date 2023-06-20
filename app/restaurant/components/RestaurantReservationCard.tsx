@@ -6,6 +6,7 @@ import { times } from "../../../data/times"
 import useAvailability from "../../../hooks/useAvailability"
 import { CircularProgress } from "@mui/material"
 import fortmatTime from "../../../utils/formatTime"
+import Link from "next/link"
 
 
 function RestaurantReservationCard({openTime, closeTime, slug}: {openTime: string, closeTime: string, slug:string}) {
@@ -101,9 +102,9 @@ function RestaurantReservationCard({openTime, closeTime, slug}: {openTime: strin
                <div className="flex flex-wrap mt-2 justify-evenly gap-2">
                   {availabilities.map(time => {
                      if (!time.available) {
-                        return <button className="p-2 bg-gray-600 rounded text-white text-center font-bold cursor-pointer w-20" key={time.time}>{fortmatTime(time.time)}</button>
+                        return <Link href={`/reserve/${slug}/?date=${day}T${time.time}&partySize=${partySize}`} className="p-2 bg-gray-600 rounded text-white text-center font-bold cursor-pointer w-20" key={time.time}>{fortmatTime(time.time)}</Link>
                      }
-                     return <button className="p-2 bg-red-600 rounded text-white text-center font-bold cursor-pointer w-20" key={time.time}>{fortmatTime(time.time)}</button>
+                     return <Link href={`/reserve/${slug}/?date=${day}T${time.time}&partySize=${partySize}`} className="p-2 bg-red-600 rounded text-white text-center font-bold cursor-pointer w-20" key={time.time}>{fortmatTime(time.time)}</Link>
                   })}
                </div>
             </div>

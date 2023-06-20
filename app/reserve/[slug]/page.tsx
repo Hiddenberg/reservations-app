@@ -1,14 +1,36 @@
-import Link from "next/link"
-import NavBar from "../../components/NavBar"
 import ReserveHeader from "./components/ReserveHeader"
 import ReserveForm from "./components/ReserveForm"
+import { PrismaClient } from "@prisma/client"
+import { notFound } from "next/navigation"
 
-function ReservationPage() {
+const prisma = new PrismaClient()
+
+const fetchRestaurantBySlug = async (slug: string) => {
+   const restaurant = await prisma.restaurant.findUnique({
+      where: {
+         slug
+      }
+   })
+
+   if (!restaurant) {
+      return notFound()
+   }
+
+   return restaurant
+}
+
+async function ReservationPage({
+   params: {slug},
+   searchParams: {date, partySize}
+}: {params: {slug: string}, searchParams: {date: string, partySize: string}}) {
+   const restaurant = await fetchRestaurantBySlug(slug)
+
+   const [day, time] = date.split("T")
    return (
       <>
          <div className="border-t h-screen">
             <div className="py-9 w-3/5 m-auto">
-               <ReserveHeader /> 
+               <ReserveHeader image={restaurant.main_image} name={restaurant.name} partySize={partySize} time={time} dateString={date}/> 
                <ReserveForm />
             </div>
          </div>
