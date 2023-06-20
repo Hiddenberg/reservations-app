@@ -70,13 +70,5 @@ export default async function findAvailableTables({time, day, restaurant}:{time:
       })
    }
 
-   const searchTimeWithTables = searchTimesWithTables.find(t => t.date.toISOString() === new Date(`${day}T${time}`).toISOString())
-
-   if (!searchTimeWithTables) {
-      return res.status(400).json({
-         errorMessage: "No availability"
-      })
-   }
-
    return searchTimesWithTables
 }
