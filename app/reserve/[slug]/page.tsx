@@ -31,7 +31,7 @@ async function ReservationPage({
          <div className="border-t h-screen">
             <div className="py-9 w-3/5 m-auto">
                <ReserveHeader image={restaurant.main_image} name={restaurant.name} partySize={partySize} time={time} dateString={date}/> 
-               <ReserveForm />
+               <ReserveForm day={day} partySize={partySize} slug={slug} time={time} />
             </div>
          </div>
       </>

@@ -1,8 +1,10 @@
 "use client"
 
 import { ChangeEventHandler, useEffect, useState } from "react"
+import useReservation from "../../../../hooks/useReservation"
+import { CircularProgress } from "@mui/material"
 
-interface ReserveFormInputs {
+export interface BookerInfo {
    bookerFirstName: string
    bookerLastName: string
    bookerPhone: string
@@ -11,8 +13,8 @@ interface ReserveFormInputs {
    bookerRequest: string
 }
 
-function ReserveForm() {
-   const [inputs, setInputs] = useState<ReserveFormInputs>({
+function ReserveForm({slug, partySize, day, time}: {slug: string, partySize: string, day: string, time: string}) {
+   const [inputs, setInputs] = useState<BookerInfo>({
       bookerFirstName: "",
       bookerLastName: "",
       bookerPhone: "",
@@ -21,6 +23,7 @@ function ReserveForm() {
       bookerRequest: ""
    })
    const [buttonDisabled, setButtonDisabled] = useState(true)
+   const {createReservation, loading} = useReservation()
 
    useEffect(() => {
       let allInputsFilled = true
@@ -43,6 +46,9 @@ function ReserveForm() {
          ...inputs,
          [e.target.name]: e.target.value
       }))
+   }
+   const handleClick = async () => {
+      await createReservation({slug, partySize, day, time, bookerInfo: inputs})
    }
 
    return (
@@ -95,8 +101,11 @@ function ReserveForm() {
             value={inputs.bookerRequest}
             onChange={handleInputChange}
          />
-         <button className="bg-red-600 w-full p-3 text-white font-bold rounded disabled:bg-gray-300" disabled={buttonDisabled}>
-            Complete reservation
+         <button onClick={handleClick} className="bg-red-600 w-full p-3 text-white font-bold rounded disabled:bg-gray-300" disabled={buttonDisabled || loading}>
+            {loading ? 
+               <CircularProgress /> :
+               "Complete reservation"
+            }
          </button>
          <p className="mt-4 text-sm">
             By clicking “Complete reservation” you agree to the OpenTable Terms
